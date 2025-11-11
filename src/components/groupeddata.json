@@ -1,0 +1,34 @@
+[
+ {
+   
+    "title1": "Profile",
+    "title2":" Settings",
+    "data": [
+      {"id": "1", "name1": "Profile ","name2":"Information","des":["Name",", Email"],"iconName":"user","iconFamily":"Feather","route":"ProfileInfo"},
+      {"id": "2", "name1": "Multiple", "name2":" Information","des":"Switch Accounts","iconName":"users","iconFamily":"Feather"}
+     
+    ]
+  },
+ {
+   
+    "title1": "App",
+    "title2":" Settings",
+    "data": [
+      {"id": "1", "name1": "Color ","name2":"Mode","des":"To change the app view to light/dark","iconName":"loader","iconFamily":"Feather","route":"ColorMode"}
+ 
+    ]
+  },{
+   
+    "title1": "General",
+    "title2":" Settings",
+    "data": [
+      {"id": "1", "name1": "Rate our","name2":" App","des":"Rate & Review the application","iconName":"heart","iconFamily":"Feather","route":"Rate"},
+      {"id": "2", "name1": "Delete","name2":" Account","des":"To Delete Account Permanently","iconName":"user-x","iconFamily":"Feather","route":"DeleteAccount"},
+      {"id": "3", "name1": "Update","name2":" App","des":"App Current Version 2.2","iconName":"smartphone","iconFamily":"Feather"}
+     
+    ]
+  }
+
+
+
+]
