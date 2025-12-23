@@ -13,8 +13,8 @@ export default function Toggleswitch({isEnabled, toggleSwitch}) {
        <View style={[styles.circle, isEnabled ? styles.thumbEnabled : styles.thumbDisabled]}>
         </View>
       <View style={styles.iconholder}>
-        <FontAwesome name="table" color="#000" size={20} />
-    <Feather name="bar-chart" color="#000" size={20}  />
+        <FontAwesome name="table" color="black" size={20} />
+    <Feather name="bar-chart" color="black" size={20}  />
       </View>
     </View>
     </TouchableOpacity>

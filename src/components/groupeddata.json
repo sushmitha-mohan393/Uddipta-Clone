@@ -4,8 +4,8 @@
     "title1": "Profile",
     "title2":" Settings",
     "data": [
-      {"id": "1", "name1": "Profile ","name2":"Information","des":["Name",", Email"],"iconName":"user","iconFamily":"Feather","route":"ProfileInfo"},
-      {"id": "2", "name1": "Multiple", "name2":" Information","des":"Switch Accounts","iconName":"users","iconFamily":"Feather"}
+      {"id": "1", "name1": "Profile ","name2":"Information","des":["Name",", Email"],"iconName":"account","iconFamily":"MaterialCommunityIcons","route":"ProfileInfo"},
+      {"id": "2", "name1": "Multiple", "name2":" Information","des":"Switch Accounts","iconName":"account-group","iconFamily":"AntDesign"}
      
     ]
   },
@@ -23,7 +23,7 @@
     "title2":" Settings",
     "data": [
       {"id": "1", "name1": "Rate our","name2":" App","des":"Rate & Review the application","iconName":"heart","iconFamily":"Feather","route":"Rate"},
-      {"id": "2", "name1": "Delete","name2":" Account","des":"To Delete Account Permanently","iconName":"user-x","iconFamily":"Feather","route":"DeleteAccount"},
+      {"id": "2", "name1": "Delete","name2":" Account","des":"To Delete Account Permanently","iconName":"account-remove","iconFamily":"AntDesign","route":"DeleteAccount"},
       {"id": "3", "name1": "Update","name2":" App","des":"App Current Version 2.2","iconName":"smartphone","iconFamily":"Feather"}
      
     ]

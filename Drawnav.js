@@ -3,9 +3,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {createDrawerNavigator,DrawerContentScrollView,DrawerItemList,DrawerItem} from '@react-navigation/drawer';
 import Dashboard from './src/screens/Dashboard';
-import Logout from "./src/screens/Logout";
-// import Wishlist from '../screens/wishlist';
-// import History from '../screens/history';
+
 import {Platform,Alert,Button, TouchableOpacity, View, Text, Settings, StyleSheet} from 'react-native';
  import Login from "./src/screens/Login"
 const Drawer = createDrawerNavigator();
@@ -19,13 +17,28 @@ import Prepaid from './src/screens/Prepaid';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Comparision from "./src/screens/Comparision";
-
+import Logout from "./src/screens/Logout";
 import History from "./src/screens/History"
-import Instructionss from './src/screens/Instructions';
+import Instructionss from './src/screens/Instructionss';
+import { DrawerActions, NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import Nav from './Nav';
+import DrawerSceneWrapper from './DrawerSceneWrapper';
 
  
 const DrawNav= () => {
+  const navigation = useNavigation();
+  const EmptyScreen = () => null;
+  const[showModal,setShowModal]=useState(false);
+  const[openLogout,setOpenLogout]=useState(false);
+   const loginResponse = useSelector((state) => state?.auth?.loginResponse)
    const [showSubMenu, setShowSubMenu] = useState(false);
+   const withDrawerWrapper = (ScreenComponent) => (props) => (
+  <DrawerSceneWrapper>
+    <ScreenComponent {...props} />
+  </DrawerSceneWrapper>
+);
+
  const drawerIcon = ({ focused, size }, IconComponent, name) => {
   return (
     <IconComponent
@@ -38,7 +51,7 @@ const DrawNav= () => {
  
 
   return (
-   
+ <>
      <Drawer.Navigator 
    
      drawerContent={(props)=>(
@@ -47,11 +60,11 @@ const DrawNav= () => {
            
               <View style={styles.profileContainer}>
                 <View style={styles.avatarContainer}>
-                      <FontAwesome name="user-circle" color="#1fb1e2ff" size={120} />
+                      <FontAwesome name="user-circle" color="#1fb1e2ff" size={heightValue(7.5)} />
                 </View>
 
-                <Text style={{fontSize:18,fontWeight:500,color:"white"}}>Test Meter Kumar</Text>
-                <Text style={styles.consumerText}>Consumer ID : 4999806</Text>
+                <Text style={{fontSize:heightValue(45),fontWeight:500,color:"white"}}>{loginResponse?.name}</Text>
+                <Text style={styles.consumerText}>Consumer ID : {loginResponse?.consumerId}</Text>
        
                 <TouchableOpacity style={styles.rechargeBtn}>
                   <Text style={styles.rechargeText}>Recharge</Text>
@@ -60,7 +73,7 @@ const DrawNav= () => {
        
              
               <View >
-                 {/* <View style={styles.separator} /> */}
+                 <View style={styles.separator} />
                 <DrawerItemList {...props} />
                 
         </View>
@@ -75,48 +88,67 @@ const DrawNav= () => {
         drawerInactiveBackgroundColor: Colors.transparent,
         drawerActiveTintColor: Colors.active,
         drawerInactiveTintColor: Colors.inactive,
-        drawerHideStatusBarOnOpen: Platform.OS === 'ios' ? true : false,
+      
         overlayColor: Colors.transparent,
-        
+        drawerLabelStyle:{fontSize:heightValue(58)},
+      
         drawerStyle: {
           backgroundColor: Colors.bg,
-          width: '70%',
+          width: '68%',
         },
       sceneStyle:{
          backgroundColor: Colors.bg,
       }
+
+
        
       }}>
        
       <Drawer.Screen
-        name="Dashboard"
-        component={Dashboard}
-        options={{
-          drawerIcon: options => drawerIcon(options, Feather,'home'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBlockColor:"#484646ff",borderWidth:0.5,borderRadius:0,}
-        }}
-      />
+  name="Dashboard"
+  options={{
+    drawerIcon: options =>
+      drawerIcon(options, Feather, 'home'),
+    headerShown: false,
+    drawerItemStyle: {
+      borderColor: "transparent",
+      borderBlockColor: "#484646ff",
+      borderWidth: 0.5,
+      borderRadius: 0,
+    }
+  }}
+>
+  {props =>
+    withDrawerWrapper(Dashboard)({
+      ...props,
+      openLogout,
+      setOpenLogout,
+    })
+  }
+</Drawer.Screen>
+
        <Drawer.Screen
         name="Live Data"
-        component={LiveData}
+         component={withDrawerWrapper(LiveData)}
         options={{
           drawerIcon: options => drawerIcon(options, Feather,'activity'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
         }}
       /> 
        <Drawer.Screen
         name="Prepaid Consumption"
-        component={Prepaid}
-        options={{
+  component={withDrawerWrapper(Prepaid)}     
+     options={{
           drawerIcon: options => drawerIcon(options, Feather,'credit-card'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
         }}
       /> 
-        <Drawer.Screen name="Consumption Log" component={LiveData} options={{drawerLabel:"Consumtion Log", swipeEnabled: false, 
+        <Drawer.Screen name="Consumption Log"   component={withDrawerWrapper(LiveData)}options={{drawerLabel:"Consumtion Log", swipeEnabled: false, 
          drawerIcon: options => drawerIcon(options,Entypo, 'bar-graph'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
        }}  listeners={{
           drawerItemPress: (e) => {
             e.preventDefault(); 
             setShowSubMenu(prev => !prev); 
           },}}/>
-      <Drawer.Screen name="History" component={History} options={{
+      <Drawer.Screen name="History"   component={withDrawerWrapper(History)} options={{
          drawerIcon: options => drawerIcon(options,Feather, 'percent'),headerShown:false, drawerItemStyle: showSubMenu
       ? {
           borderColor: "transparent",
@@ -127,7 +159,7 @@ const DrawNav= () => {
         }
       : { display:'none' },
        }}/>
-<Drawer.Screen name="Comparison" component={Comparision} options={{
+<Drawer.Screen name="Comparison"  component={withDrawerWrapper(Comparision)} options={{
          drawerIcon: options => drawerIcon(options, MaterialCommunityIcons,'circle-slice-2'),headerShown:false, drawerItemStyle: showSubMenu
       ? {
           borderColor: "transparent",
@@ -140,19 +172,19 @@ const DrawNav= () => {
        }}/>
         <Drawer.Screen
         name="Notification"
-        component={Notifications}
+         component={withDrawerWrapper(Notifications)}
  options={{
          drawerIcon: options => drawerIcon(options, Feather,'bell'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
        }}/>
         <Drawer.Screen
         name="Instructions"
-        component={Instructionss}
+         component={withDrawerWrapper(Instructionss)}
  options={{
          drawerIcon: options => drawerIcon(options, Feather,'info'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
        }} />
        <Drawer.Screen
         name="DOs & DON'Ts"
-        component={Dos}
+         component={withDrawerWrapper(Dos)}
         options={{
           drawerIcon: options => drawerIcon(options, Feather,'check-circle'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
         }}
@@ -160,27 +192,48 @@ const DrawNav= () => {
     
       <Drawer.Screen
         name="Settings"
-        component={Settinggs}
+         component={withDrawerWrapper(Settinggs)}
         options={{
           drawerIcon: options => drawerIcon(options,Feather, 'settings'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
         }}
       />
       <Drawer.Screen
         name="Contact Us"
-        component={Contact}
+          component={withDrawerWrapper(Contact)}
         options={{
           drawerIcon: options => drawerIcon(options, Feather,'at-sign'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
         }}
       /> 
-      <Drawer.Screen
-        name="Logout"
-        component={Logout}
- options={{
-         drawerIcon: options => drawerIcon(options, Feather,'smartphone'),headerShown:false,drawerItemStyle:{borderColor:"transparent",borderBottomColor:"#484646ff",borderWidth:0.5,borderRadius:0}
-       }}/>
-     
-     
+     <Drawer.Screen
+  name="Logout"
+  component={EmptyScreen}
+  options={{
+    drawerIcon: options =>
+      drawerIcon(options, Feather, 'smartphone'),
+    headerShown: false,
+    drawerItemStyle: {
+      borderColor: "transparent",
+      borderBottomColor:"#484646ff",
+      borderWidth: 0.5,
+      borderRadius: 0
+    }
+  }}
+listeners={({ navigation }) => ({
+    drawerItemPress: (e) => {
+      e.preventDefault(); 
+     navigation.closeDrawer();
+      navigation.navigate("Dashboard", {
+   openLogout:true
+    })
+  }
+  })}
+/>
+
+      
+    
     </Drawer.Navigator>
+
+ </>
   );
 };
  
@@ -207,7 +260,7 @@ const styles = StyleSheet.create({
   },
   consumerText: {
     color: '#ccc',
-    fontSize: 15,
+    fontSize: heightValue(58),
     marginBottom: 10,
   },
   rechargeBtn: {
@@ -221,19 +274,9 @@ const styles = StyleSheet.create({
  
     color: '#fff',
    
-    fontSize:16
-  },
-    drawerItem: {
-    color: "#fff",
-    fontSize: 16,
-    paddingVertical: 10,
-    paddingLeft: 20,
-  },
-  subItem: {
-    color: "#ccc",
-    fontSize: 15,
-    paddingVertical: 8,
-  },
- 
+    fontSize:heightValue(55)
+  }, 
 })
+
+ 
  

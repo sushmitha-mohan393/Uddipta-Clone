@@ -9,44 +9,49 @@ import { heightValue , widthValue } from "../../styles";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import groupedData from "../components/groupeddata.json";
 import LottieView from "lottie-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { Colors } from "../../Colors";
 export default function Notifications({navigation})
 { 
   const{openDrawer}=navigation;
-     const [activeButton, setActiveButton] = useState(null); // State to track the active button
-
+     const [activeButton, setActiveButton] = useState(null); 
+   const darkMode = useSelector((state) => state?.darkMode?.darkMode);
   const handlePress = (buttonId) => {
     setActiveButton(buttonId);
     
   };
     return(
-      <DrawerSceneWrapper>
-        <View style={styles.container}>
+    
+          <SafeAreaView style={{flex:1,backgroundColor:darkMode?Colors.black:Colors.bgscreens}}>
+        <View style={[styles.container,{backgroundColor:darkMode?Colors.black:Colors.bgscreens}]}>
             <StatusBar barStyle={"dark-content"}/>
-            <View style={{flexDirection:"row",justifyContent:"space-between",margin:20,marginBottom:0,marginTop:25}}>
+            <View style={{flexDirection:"row",justifyContent:"space-between",marginHorizontal:widthValue(20),marginBottom:0,marginTop:5}}>
             <TouchableOpacity onPress={openDrawer}>
-              <Icon name="menu" size={25} color="#666" />
+              <Icon name="menu" size={heightValue(30)} color="#666" />
             </TouchableOpacity>
               <View style={styles.noti}>
-          <Ionicons name="notifications-outline" size={30} color="black" />
+          <Ionicons name="notifications-outline" size={widthValue(14)} color={darkMode?Colors.menubar:Colors.black}  />
           <View style={styles.badge}>
             <Text style={styles.badgeText}>8</Text>
           </View>
         </View>
           </View>
-           <Text style={{marginHorizontal:widthValue(20),fontSize:25}}>Be<Text style={{color:"#4f7640ff"}}> Notified</Text></Text>
-           <Text style={{marginHorizontal:widthValue(20),marginVertical:heightValue(130),lineHeight:30,fontSize:15}}>
+           <Text style={{marginHorizontal:widthValue(20),fontSize:heightValue(35),color:darkMode?Colors.white:Colors.black}}>Be<Text style={{color:"#4f7640ff"}}> Notified</Text></Text>
+           <Text style={{marginHorizontal:widthValue(20),marginVertical:heightValue(130),lineHeight:30,fontSize:heightValue(55),color:darkMode?Colors.white:Colors.black}}>
          Engage with the Utility via notifications
            </Text>
           
           <View style={{flex:1}}>
- <Text style={{textAlign:"center",color:"#d35656ff",fontSize:23}}>Data Not Found</Text>
+ <Text style={{textAlign:"center",color:"#c63b2f",fontSize:23}}>Data Not Found</Text>
               <LottieView source={require("../../assets/animations/APIError.json") }autoPlay loop  style={styles.imageContainer}/>
  
  
           </View>
          
           </View>
-          </DrawerSceneWrapper>
+          </SafeAreaView>
+         
           )
           }
           const styles = StyleSheet.create({
@@ -62,25 +67,26 @@ export default function Notifications({navigation})
   
 
  
+     
      noti: {
         position: 'relative',
-        width: 30, 
+        width: widthValue(15), 
         height: 30, 
   
       },
       badge: {
         position: 'absolute',
         top: -5, 
-        right: -5, 
+        right:widthValue(-60),
         backgroundColor: "#6e9865ff",
         borderRadius: 10,
-        paddingHorizontal: 6,
+        paddingHorizontal: widthValue(60),
         paddingVertical: 2,
         alignItems: 'center',
         justifyContent: 'center',
       },
       badgeText: {
         color: 'white',
-        fontSize: 10,
+        fontSize: heightValue(80),
         fontWeight: 'bold',
-      }})
+      },})

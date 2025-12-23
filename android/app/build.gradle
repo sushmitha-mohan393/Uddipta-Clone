@@ -75,7 +75,7 @@ def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 android {
     project.ext.vectoricons = [
-    iconFontNames: ['Feather.ttf','AntDesign.ttf','Ionicons.ttf','MaterialCommunityIcons.ttf','Fontisto.ttf','FontAwesome.ttf','Entypo.ttf'],
+    iconFontNames: ['Feather.ttf','AntDesign.ttf','Ionicons.ttf','MaterialCommunityIcons.ttf','Fontisto.ttf','FontAwesome.ttf','Entypo.ttf','EvilIcons.ttf'],
 ]
 project.ext.react=[
     enableHermes:false
@@ -112,6 +112,14 @@ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
+    }
+    packagingOptions {
+       pickFirst 'lib/x86/libc++_shared.so'
+       pickFirst 'lib/x86_64/libjsc.so'
+       pickFirst 'lib/arm64-v8a/libjsc.so'
+       pickFirst 'lib/arm64-v8a/libc++_shared.so'
+       pickFirst 'lib/x86_64/libc++_shared.so'
+       pickFirst 'lib/armeabi-v7a/libc++_shared.so'
     }
 }
 

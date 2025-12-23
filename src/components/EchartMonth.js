@@ -2,9 +2,13 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { BarChart } from "react-native-gifted-charts";
 import { BorderlessButton } from 'react-native-gesture-handler';
+import { heightValue, widthValue } from '../../styles';
+import { useSelector } from 'react-redux';
+import { Colors } from '../../Colors';
 
 
 const EchartMonth = () => {
+      const darkMode = useSelector((state) => state?.darkMode?.darkMode);
       const barData = [
 
         {value: 500, label: 'Jan',frontColor: "#6AC26A"},
@@ -16,28 +20,31 @@ const EchartMonth = () => {
         
     ];
   return (
-   <View >
+   <View style={{width:widthValue(1.2)}}>
             <BarChart
-                barWidth={22}
+               barWidth={widthValue(22)}
                 noOfSections={3}
                 barBorderRadius={10}
-              
+               initialSpacing={widthValue(20)}
+                           spacing={widthValue(18)}
               data={barData}
                 hideRules
-                
+                height={heightValue(4)}
                 yAxisThickness={0}
                 xAxisThickness={0}
+                   xAxisLabelTextStyle={{fontSize:heightValue(60),color:darkMode?Colors.white:Colors.black}}
+                               yAxisTextStyle={{fontSize:heightValue(60),color:darkMode?Colors.white:Colors.black}}
                
                
             />
   <View style={styles.legendContainer}>
             <View style={styles.legendRow}>
-              <View style={styles.dot } />
-              <Text style={styles.legendText}>X-axis--Months</Text>
+              <View style={[styles.dot,{backgroundColor:darkMode?Colors.white:Colors.black}] } />
+              <Text style={[styles.legendText,{color:darkMode?Colors.white:Colors.black}]}>X-axis--Months</Text>
             </View>
             <View style={styles.legendRow}>
-              <View style={[styles.dot ]} />
-              <Text style={styles.legendText}>
+              <View style={[styles.dot,{backgroundColor:darkMode?Colors.white:Colors.black} ]} />
+              <Text style={[styles.legendText,{color:darkMode?Colors.white:Colors.black}]}>
                Y-axis--
                Consumption(M3)
               </Text>
@@ -53,7 +60,7 @@ export default EchartMonth
 const styles = StyleSheet.create({
 
    legendContainer: {
-  flex:1,margin:"auto",marginTop:10
+  flex:1,margin:"auto",marginTop:10,paddingBottom:10
   },
   legendRow: {
     flexDirection: 'row',
@@ -61,15 +68,15 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   dot: {
-    width: 8,
-    height: 8,
+    width: widthValue(60),
+    height: widthValue(60),
     borderRadius: 6,
     marginRight: 8,
     backgroundColor:"black"
   },
   legendText: {
     color: 'black',
-    fontSize: 12,
+    fontSize:  heightValue(70),
   },
 })
 

@@ -9,11 +9,11 @@ import React from 'react';
 import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
 import {useDrawerProgress} from '@react-navigation/drawer';
  
-const DrawerSceneWrapper = ({children,navigation}) => {
+const DrawerSceneWrapper = ({children}) => {
   const progress = useDrawerProgress();
   const {width} = useWindowDimensions();
-  console.log(progress.value);
- const openDrawer=()=>navigation.openDrawe();
+  console.log(progress.value)
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       {perspective: 1000},

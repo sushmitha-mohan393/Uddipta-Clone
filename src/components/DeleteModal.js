@@ -9,6 +9,8 @@ const DeleteModal = () => {
                  visible={showAlert}
                  animationType='fade'
                  onRequestClose={() => setShowAlert(false)}
+                   presentationStyle="overFullScreen"
+      statusBarTranslucent={true}
                >
      
          
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   logoutText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
   },
 
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
   },
   alertMsg: {
     fontSize: 15,
-    color: '#333',
+    color: 'black',
     
   },
   buttonRow: {
@@ -107,14 +109,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   confirmBtn: {
-    backgroundColor: '#ef5b5bff',
+    backgroundColor: '#d13e3eff',
   },
   cancelText: {
     color: 'white',
     fontSize: 16,
   },
   confirmText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
   },
 });

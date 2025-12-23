@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 import { heightValue, widthValue } from '../../styles';
 import DeleteModal from "../components/DeleteModal"
+import { useSelector } from 'react-redux';
+import { Colors } from '../../Colors';
 
 
 const DeleteAccount = ({navigation,showAlert,setShowAlert}) => {
-    
+      const darkMode = useSelector((state) => state?.darkMode?.darkMode);
       const [loading, setLoading] = useState(false);
      const[secModal,setSecModal]=useState(false)
        const [buttonText, setButtonText] = useState("Delete");
@@ -56,13 +58,15 @@ const DeleteAccount = ({navigation,showAlert,setShowAlert}) => {
              visible={showAlert}
              animationType='fade'
              onRequestClose={() => setShowAlert(false)}
+               presentationStyle="overFullScreen"
+      statusBarTranslucent={true}
            >
  
      
-      <View style={styles.overlay}>
+      <View style={[styles.overlay,{backgroundColor:darkMode?"rgba(40, 39, 39, 0.68)":Colors.transparent}]}>
       
-          <View style={styles.alertBox}>
-            <Text style={styles.alertTitle}>Are you sure you want to delete your account?</Text>
+          <View style={[styles.alertBox,{backgroundColor:darkMode?Colors.darkbg:Colors.white}]}>
+            <Text style={[styles.alertTitle,{color:darkMode?Colors.white:Colors.black}]}>Are you sure you want to delete your account?</Text>
             
  
             <View style={styles.buttonRow}>
@@ -86,13 +90,13 @@ const DeleteAccount = ({navigation,showAlert,setShowAlert}) => {
               >
                 {loading ? (
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Text style={{ color: "white", fontSize: 16, marginRight: 8 }}>
+                    <Text style={{ color: "white", fontSize: heightValue(55), marginRight: 8 }}>
                       Loading
                     </Text>
                     <ActivityIndicator color="white" />
                   </View>
                ) : (
-                  <Text style={{ color: "white", fontSize: 18, fontWeight: "600" }}>
+                  <Text style={{ color: "white", fontSize: heightValue(55), fontWeight: "600" }}>
                   {buttonText}
                   </Text>
                  )}
@@ -109,13 +113,15 @@ const DeleteAccount = ({navigation,showAlert,setShowAlert}) => {
                          visible={showAlert}
                          animationType='fade'
                           onRequestClose={()=>setSecModal(false)}
+                            presentationStyle="overFullScreen"
+      statusBarTranslucent={true}
                        >
              
-                 <View style={styles.overlay}>
+                 <View style={[styles.overlay,{backgroundColor:darkMode?"rgba(40, 39, 39, 0.68)":Colors.transparent}]}>
                   
                   
-                      <View style={styles.alertBox}>
-                        <Text style={styles.alertTitle}>We've sent an email to Raj.Kumar@esyasoft.com with a link to delete your account</Text>
+                      <View style={[styles.alertBox,{backgroundColor:darkMode?Colors.darkbg:Colors.white}]}>
+                        <Text style={[styles.alertTitle,{color:darkMode?Colors.white:Colors.black}]}>We've sent an email to Raj.Kumar@esyasoft.com with a link to delete your account</Text>
                         
              
                         <View style={[styles.buttonRow,{justifyContent:"center"}]}>
@@ -131,7 +137,7 @@ const DeleteAccount = ({navigation,showAlert,setShowAlert}) => {
                          style={[styles.button,styles.cancelBtn]}
                           >
                             
-                              <Text style={{ color: "white", fontSize: 18, fontWeight: "600" }}>
+                              <Text style={{ color: "white", fontSize: heightValue(50), fontWeight: "600" }}>
                               OK
                               </Text>
                         
@@ -157,21 +163,9 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
  
   },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  logoutBtn: {
-    marginTop: 20,
-    backgroundColor: 'green',
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 8,
-  },
-  logoutText: {
-    color: '#fff',
-    fontSize: 16,
-  },
+  
+
+ 
   overlay: {
    
     justifyContent:"center",
@@ -183,20 +177,20 @@ const styles = StyleSheet.create({
     alignSelf:"center",
     borderRadius:20,
     width:widthValue(1.2),
-    height:heightValue(5),
+   
    margin:"auto",
     paddingVertical: 20,
     paddingHorizontal: 20,
     elevation:5
   },
   alertTitle: {
-    fontSize: 20,
+    fontSize: heightValue(42),
     fontWeight: '600',
-    marginBottom: 10,textAlign:"center"
+    marginBottom:heightValue(90),textAlign:"center"
   },
   alertMsg: {
     fontSize: 15,
-    color: '#333',
+    color: 'black',
     
   },
   buttonRow: {
@@ -204,11 +198,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems:'center',
     
-    marginTop:20
+    marginTop:10
   },
   button: {
-   width:widthValue(4),
-    height: 45,
+   paddingHorizontal:widthValue(20),
+    paddingVertical:heightValue(60),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
@@ -223,10 +217,10 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: heightValue(55),
   },
   confirmText: {
-    color: '#fff',
-    fontSize: 16,
+    color: 'white',
+    fontSize: heightValue(55),
   },
 });

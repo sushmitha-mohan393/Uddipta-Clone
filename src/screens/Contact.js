@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {  StyleSheet, View,Text,Image,ImageBackground,ScrollView,StatusBar,Button, TouchableOpacity,Modal,ActivityIndicator,Alert,TextInput,SectionList} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -11,56 +11,88 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import groupedData from "../components/groupeddata.json";
 import LottieView from "lottie-react-native";
 import Request from "../components/Request"
+import { SafeAreaView } from "react-native-safe-area-context";
+ import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { useSelector } from "react-redux";
+import { Colors } from "../../Colors";
+import axios from "axios";
 export default function LiveData({navigation})
 { 
   const{openDrawer}=navigation;
-     const [activeButton, setActiveButton] = useState(null); // State to track the active button
-
+     const [activeButton, setActiveButton] = useState(null); 
+     const[contact,setContact]=useState(null);
+   const darkMode = useSelector((state) => state?.darkMode?.darkMode);
+    const loginResponse = useSelector((state) => state?.auth?.loginResponse);
   const handlePress = (buttonId) => {
     setActiveButton(buttonId);
     
   };
+       useEffect(()=>{
+ contactapi();
+     },[]
+    );
+      const contactapi = async () => {
+    try {
+      const cont = await axios.get(
+        `https://cportalapi-agcl-tnd.esyasoft.com/api/Consumer/ContactUs?name=${loginResponse?.name}`,
+        { 
+       
+          headers: {
+            Authorization: `Bearer ${loginResponse?.jwtToken}`,
+          },
+        }
+      );
+
+   
+      setContact(cont.data);
+     
+
+    } catch (error) {
+      console.log("Balance API error:", error);
+    }
+  };
     return(
-      <DrawerSceneWrapper>
-        <View style={styles.container}>
+    
+         <SafeAreaView style={{flex:1,backgroundColor:darkMode?Colors.black:Colors.bgscreens}}>
+        <View style={[styles.container,{backgroundColor:darkMode?Colors.black:Colors.bgscreens}]}>
             <StatusBar barStyle={"dark-content"}/>
-            <View style={{flexDirection:"row",justifyContent:"space-between",margin:20,marginBottom:0,marginTop:25}}>
+            <View style={{flexDirection:"row",justifyContent:"space-between",marginHorizontal:widthValue(20),marginBottom:0,marginTop:5}}>
             <TouchableOpacity onPress={openDrawer}>
-              <Icon name="menu" size={25} color="#666" />
+              <Icon name="menu" size={heightValue(30)} color="#666" />
             </TouchableOpacity>
               <View style={styles.noti}>
-          <Ionicons name="notifications-outline" size={30} color="black" />
+          <Ionicons name="notifications-outline" size={widthValue(14)} color={darkMode?Colors.menubar:Colors.black}  />
           <View style={styles.badge}>
             <Text style={styles.badgeText}>8</Text>
           </View>
         </View>
           </View>
-          <Text style={{marginHorizontal:widthValue(20),fontSize:25}}>Have a<Text style={{color:"#36512cff"}}> query ?</Text></Text>
-           <Text style={{marginHorizontal:widthValue(20),marginVertical:heightValue(100),lineHeight:30,fontSize:15}}>
+          <Text style={{marginHorizontal:widthValue(20),fontSize:heightValue(35),color:darkMode?Colors.white:Colors.black}}>Have a<Text style={{color:"#4f7640ff"}}> query ?</Text></Text>
+           <Text style={{marginHorizontal:widthValue(20),marginVertical:heightValue(100),lineHeight:30,fontSize:heightValue(55),color:darkMode?Colors.white:Colors.black}}>
            Get your Queries resolved.
            </Text>
            <LottieView source={require("../../assets/animations/contactUs.json")}autoPlay loop  style={styles.imageContainer}/>
-        <View  style={{width:widthValue(1.1),backgroundColor:"#fff",height:heightValue(10),margin:20,marginTop:0,borderRadius:10,padding:20,paddingLeft:30}}>
-         <Text style={{fontSize:20}}>
+        <View  style={{width:widthValue(1.1),backgroundColor:darkMode?Colors.darkbg:Colors.white,margin:20,marginTop:0,borderRadius:10,paddingVertical:heightValue(60),paddingLeft:30,paddingRight:20}}>
+         <Text style={{fontSize:heightValue(40),color:darkMode?Colors.white:Colors.black}}>
             Toll Free Number
          </Text>
-         <Text style={{color:"#64ad54ff",fontSize:18,marginTop:7}}>18005471266
+         <Text style={{color:"#64ad54ff",fontSize:heightValue(50),marginTop:7}}>{contact?.tollFreeNumber}
          </Text>
          <View style={styles.seperator}></View>
           </View>
-          <View style={{flexDirection:"row",justifyContent:"center",alignItems: 'center',marginTop:20 }}>
+          <View style={{flexDirection:"row",justifyContent:"center",alignItems: 'center',marginTop:heightValue(60) }}>
           <View style={styles.line} />
       <Text style={styles.text}>Send Request</Text>
       <View style={styles.line} />
       </View>
       <TouchableOpacity onPress={()=>navigation.navigate("Request")}>
-        <View  style={{width:widthValue(8),backgroundColor:"#fff",height:heightValue(18),margin:15,borderRadius:10,alignSelf:"center",justifyContent:"center",alignItems :"center",padding:10}}>
-            <Fontisto name="telegram" color="#64ad54ff" size={27} />
+        <View  style={{backgroundColor:darkMode?Colors.darkbg:Colors.white,margin:15,borderRadius:10,alignSelf:"center",justifyContent:"center",alignItems :"center",padding:12}}>
+           <FontAwesome name="telegram" color="#64ad54ff" size={24} />
         </View>
         </TouchableOpacity>
-         <Text style={{alignSelf:"center",fontSize:12,color:"gray"}}>Send your request to AGCL</Text>
-          </View>
-          </DrawerSceneWrapper>)
+         <Text style={{alignSelf:"center",fontSize:heightValue(62),color:"gray"}}>Send your request to AGCL</Text>
+          </View></SafeAreaView>
+      )
 }
       const styles = StyleSheet.create({
   container: {
@@ -83,32 +115,31 @@ export default function LiveData({navigation})
   },
   text: {
    
-    fontSize: 18,
+    fontSize: heightValue(40),
     color: "#64ad54ff"
   },
   
 
- 
-     noti: {
+ noti: {
         position: 'relative',
-        width: 30, 
+        width: widthValue(15), 
         height: 30, 
   
       },
       badge: {
         position: 'absolute',
         top: -5, 
-        right: -5, 
-        backgroundColor: "#64ad54ff",
+        right:widthValue(-60),
+        backgroundColor: "#6e9865ff",
         borderRadius: 10,
-        paddingHorizontal: 6,
+        paddingHorizontal: widthValue(60),
         paddingVertical: 2,
         alignItems: 'center',
         justifyContent: 'center',
       },
       badgeText: {
         color: 'white',
-        fontSize: 10,
+        fontSize: heightValue(80),
         fontWeight: 'bold',
       },seperator:{
         height:1,marginVertical:1,backgroundColor:"#dfd8d8ff"

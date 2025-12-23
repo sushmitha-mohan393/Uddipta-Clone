@@ -1,5 +1,8 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { heightValue } from '../../styles'
+import { useSelector } from 'react-redux'
+import { Colors } from '../../Colors'
 const data = [
     {id: 1, name: 'Jan', consumption:"500"},
     {id: 2, name: 'Feb', consumption:"380"},
@@ -10,31 +13,32 @@ const data = [
    
 ]
 const TableMonth = () => {
+      const darkMode = useSelector((state) => state?.darkMode?.darkMode);
     const item = ({ item }) => (
     
         <View style={{ flexDirection: 'row',gap:50}}>
             
            <View>
-                <Text style={{ fontSize: 16,width:50}}>{item.id}</Text>
+                <Text style={{ fontSize:  heightValue(55),width:50,color:darkMode?Colors.white:Colors.black}}>{item.id}</Text>
             </View>
           
-                <Text style={{ fontSize: 16,width:60,left:-15}}>{item.name}</Text>
+                <Text style={{ fontSize:  heightValue(55),width:60,left:-15,color:darkMode?Colors.white:Colors.black}}>{item.name}</Text>
             
            
-                <Text style={{ fontSize: 16,  width:30,left:-25}}>{item.consumption}</Text>
+                <Text style={{ fontSize:  heightValue(55),  width:30,left:-25,color:darkMode?Colors.white:Colors.black}}>{item.consumption}</Text>
             
         </View>
     )
     return (
-        <View style={{flex:1,marginTop:30
+        <View style={{flex:1,marginVertical:30
         }}>
             <View style={{flexDirection:"row",gap:20,margin:"auto"}}> 
-                <Text style={{ fontSize: 16, fontWeight: 'bold',width:68 ,textAlign:"center",}}>      SL.No  </Text>
-                <Text style={{ fontSize: 16, fontWeight: 'bold',width:50 ,textAlign:"center",marginLeft:10}}>   Days</Text>
-                <Text style={{ fontSize: 16, fontWeight: 'bold',textAlign:"center",marginLeft:10}}>Consumption(M3)</Text>
+                <Text style={{ fontSize:  heightValue(55), fontWeight: 'bold',width:68 ,textAlign:"center",color:darkMode?Colors.white:Colors.black}}>     SL.No  </Text>
+                <Text style={{ fontSize:  heightValue(55), fontWeight: 'bold',width:50 ,textAlign:"center",marginLeft:10,color:darkMode?Colors.white:Colors.black}}>   Days</Text>
+                <Text style={{ fontSize:  heightValue(55), fontWeight: 'bold',textAlign:"center",marginLeft:10,color:darkMode?Colors.white:Colors.black}}>Consumption(M3)</Text>
             </View >
 
-            <View style={styles.seperator}></View>
+            <View style={[styles.seperator,{backgroundColor:darkMode?Colors.white:Colors.black}]}></View>
             <FlatList data={data} renderItem={item} keyExtractor={item => item.id.toString()} style={{marginHorizontal:50}}/>
         </View>
     )

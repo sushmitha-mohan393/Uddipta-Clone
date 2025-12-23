@@ -4,24 +4,29 @@ import Onboarding from "react-native-onboarding-swiper";
 import { useNavigation } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 import { heightValue, widthValue } from "../../styles";
+import { useDispatch } from "react-redux";
+import { showOnboarding } from "../redux/authSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { completeOnboarding } from "../redux/OnboardingSlice";
 // import Logout from "./Logout";
 
 const OnboardingScreen = () => {
-  const navigation=useNavigation();
-  const handleDone=()=>
-  {
-    navigation.navigate("Login");
-  }
+const navigation=useNavigation();
+const dispatch = useDispatch();
+   const handleDone = () => {
+    dispatch(completeOnboarding());
+    navigation.replace("Login");
+  };
   const donebutn=({...props})=>{
     return(
-      <TouchableOpacity {...props} >
+      <TouchableOpacity  onPress={handleDone}{...props} >
        <Text style={{color:"green",fontSize:20,marginRight:20,fontWeight:600}}>Done</Text>
       </TouchableOpacity>
     )
   }
   const skip=({...props})=>{
     return(
-      <TouchableOpacity {...props} >
+      <TouchableOpacity onPress={handleDone} {...props} >
        <Text style={{color:"green",fontSize:20,marginLeft:20,fontWeight:600}}>Login</Text>
       </TouchableOpacity>
     )
@@ -87,7 +92,7 @@ const OnboardingScreen = () => {
           
            image: (
           <View >
-            <View style={styles.titleContainer}>
+            <View style={[styles.titleContainer]}>
               <Text style={styles.stepNumber}>02</Text>
               <Text style={styles.titleText}>Pay your</Text>
               <Text style={styles.subtitleText}>BILLS ONLINE</Text>
@@ -114,7 +119,7 @@ export default OnboardingScreen;
 const styles = StyleSheet.create({
   imageContainer: {
     width:widthValue(1),
-   height:heightValue(2.1)
+   height:heightValue(2.3)
     
   },
  
@@ -122,31 +127,32 @@ const styles = StyleSheet.create({
   
   titleContainer: {
     alignItems: "flex-start",
-    marginHorizontal:40
+    marginHorizontal:widthValue(7),
+  position :"static"
   },
   stepNumber: {
-    fontSize: 80,
+    fontSize: heightValue(12),
     color: "#59C36A",
     fontWeight: "700",
-
+marginTop:heightValue(10)
   },
   titleText: {
-    fontSize: 35,
+    fontSize: heightValue(20),
     color: "#fff",
     fontWeight: "500",
    
   },
   subtitleText: {
-    fontSize: 35,
+    fontSize: heightValue(26),
     color: "#59C36A",
     fontWeight: "700",
   },
   description: {
     color: "#fff",
-  marginHorizontal:40,
-    fontSize: 18,
-    lineHeight: 25,
-  marginBottom:-40
+  marginHorizontal:widthValue(7),
+    fontSize: heightValue(50),
+    lineHeight: heightValue(40),
+  // marginBottom:-40
   },
   skip:{
     color:"green",fontSize:20,fontWeight:600

@@ -4,7 +4,7 @@ import React from 'react'
 const DataNotFound = () => {
   return (
      <View style={{flex:1,top:heightValue(5)}}>
- <Text style={{textAlign:"center",color:"#d35656ff",fontSize:23}}>Data Not Found</Text>
+ <Text style={{textAlign:"center",color:"#c63b2f",fontSize:23}}>Data Not Found</Text>
               <LottieView source={require("../../assets/animations/APIError.json") }autoPlay loop  style={styles.imageContainer}/>
  
  

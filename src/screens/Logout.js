@@ -1,94 +1,70 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   Modal,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
-import Login from "./Login"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import DrawerSceneWrapper from '../../DrawerSceneWrapper';
+import { heightValue, widthValue } from '../../styles';
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/authSlice";
+import { Colors } from '../../Colors';
 
-export default function DashboardScreen() {
-   const navigation=useNavigation();
-  const [showAlert, setShowAlert] = useState(true);
-  const [loading, setLoading] = useState(false);
-   const [buttonText, setButtonText] = useState("Yes");
-  const handleLogout = () => {
-    setButtonText("Logging Out...");
-    setLoading(true);
+const Logout = ({ showLogoutModal, setShowLogoutModal }) => {
+  const navigation = useNavigation();
+  const dispatch=useDispatch();
+     const darkMode = useSelector((state) => state?.darkMode?.darkMode);
 
-    setTimeout(() => {
-      setLoading(false);
-      setShowAlert(false);
-      setButtonText("Yes");
-      navigation.navigate("Login");
-    }, 1500);
-  };
-   useEffect(() => {
-    setShowAlert(true);
-  }, [showAlert]);
- 
   return (
-     <DrawerSceneWrapper>
-    <View style={styles.container}>
- 
-     
- 
-     
-      <Modal
-        transparent
-        visible={showAlert}
-        animationType="slide" 
-        onRequestClose={() => setShowAlert(false)}
-      >
-        <View style={styles.overlay}>
-          <View style={styles.alertBox}>
-            <Text style={styles.alertTitle}>Alert</Text>
-            <Text style={styles.alertMsg}>
-              Are you sure you want to logout?
-            </Text>
- 
-            <View style={styles.buttonRow}>
-             
-              <TouchableOpacity
-                style={[styles.button, styles.cancelBtn]}
-                onPress={() => {setShowAlert(false),navigation.navigate("Dashboard")}}
-                
-              >
-                <Text style={styles.cancelText}>No</Text>
-              </TouchableOpacity>
- 
-            
-              <TouchableOpacity
-               
-                onPress={handleLogout}
-            disabled={loading}
-             style={[styles.button,styles.confirmBtn]}
-              >
-                     {loading ? (
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Text style={{ color: "white", fontSize: 16, marginRight: 8 }}>
-                      Logging Out
-                    </Text>
-                    <ActivityIndicator color="white" />
-                  </View>
-                ) : (
-                  <Text style={{ color: "white", fontSize: 18, fontWeight: "600" }}>
-                    {buttonText}
-                  </Text>
-                )}
-              </TouchableOpacity>
-            </View>
+    <Modal
+      transparent
+      visible={showLogoutModal}
+      animationType="slide"
+      onRequestClose={() => setShowLogoutModal(false)}
+      presentationStyle="overFullScreen"
+      statusBarTranslucent={true}
+    >
+      <View style={[styles.overlay,{backgroundColor:darkMode?"rgba(40, 39, 39, 0.68)":Colors.transparent}]}>
+        <View style={[styles.alertBox,{backgroundColor:darkMode?Colors.darkbg:Colors.white}]}>
+          <Text style={[styles.alertTitle,{color:darkMode?Colors.white:Colors.black}]}>Alert</Text>
+          <Text style={[styles.alertMsg,{color:darkMode?Colors.white:Colors.black}]}>Are you sure you want to logout?</Text>
+
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={[styles.buttons, styles.cancelBtn]}
+              onPress={() => setShowLogoutModal(false)}
+            >
+              <Text style={styles.cancelText}>No</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.buttons, styles.confirmBtn]}
+              onPress={() => {
+                setShowLogoutModal(false);
+                dispatch(logout())
+                // AsyncStorage.removeItem("userToken");
+navigation.reset({
+  index: 0,
+  routes: [{ name: "Login" }],
+});
+              }}
+            >
+              <Text style={styles.confirmText}>Yes</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </View>
-    </DrawerSceneWrapper>
+      </View>
+    </Modal>
   );
-}
+};
+
+export default Logout;
+
+
+
  
 const styles = StyleSheet.create({
   container: {
@@ -115,7 +91,7 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: '#rgba(0,0,0,0.2)',
+    backgroundColor: '#rgba(0,0,0,0.3)',
   },
   alertBox: {
     backgroundColor: 'white',
@@ -139,7 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  button: {
+  buttons: {
     flex: 1,
     height: 45,
     justifyContent: 'center',
@@ -158,9 +134,17 @@ const styles = StyleSheet.create({
     color: 'green',
     fontSize: 16,
   },
+  buttons: {
+    paddingHorizontal:widthValue(6),
+    paddingVertical:heightValue(80),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8
+  },
   confirmText: {
     color: '#fff',
     fontSize: 16,
   },
 });
- 
+
+
